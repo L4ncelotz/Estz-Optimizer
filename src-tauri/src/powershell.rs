@@ -1,5 +1,10 @@
 use serde::Serialize;
 use std::process::Command;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 
 #[derive(Debug, Serialize, Clone)]
 pub struct PsOutput {
@@ -11,7 +16,15 @@ pub struct PsOutput {
 
 /// Execute a PowerShell command hidden (no window popup)
 pub fn execute(script: &str) -> PsOutput {
-    let output = Command::new("powershell.exe")
+    #[cfg(target_os = "windows")]
+    let mut cmd = Command::new("powershell.exe");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(CREATE_NO_WINDOW);
+    
+    #[cfg(not(target_os = "windows"))]
+    let mut cmd = Command::new("powershell.exe");
+
+    let output = cmd
         .args([
             "-NoProfile",
             "-NonInteractive",
