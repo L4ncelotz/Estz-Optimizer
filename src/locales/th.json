@@ -1,0 +1,142 @@
+{
+  "app": {
+    "name": "Estz",
+    "version": "v0.1.0",
+    "tagline": "เครื่องมือปรับแต่ง Windows"
+  },
+  "nav": {
+    "dashboard": "แดชบอร์ด",
+    "safe_optimize": "Optimize อัตโนมัติ",
+    "advanced": "ปรับแต่งขั้นสูง",
+    "gaming": "ปรับแต่งเกม",
+    "process": "จัดการ Process",
+    "network": "เครือข่าย",
+    "bloatware": "ลบ Bloatware",
+    "history": "ประวัติการดำเนินการ",
+    "settings": "การตั้งค่า",
+    "category_main": "หลัก",
+    "category_tools": "เครื่องมือ",
+    "category_system": "ระบบ"
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "subtitle": "ภาพรวมระบบและตัวชี้วัดแบบเรียลไทม์",
+    "cpu_usage": "การใช้งาน CPU",
+    "ram_usage": "การใช้งาน RAM",
+    "gpu": "GPU",
+    "disk": "ดิสก์",
+    "power_plan": "แผนพลังงาน",
+    "os": "ระบบปฏิบัติการ",
+    "system_status": "สถานะระบบ",
+    "quick_actions": "ดำเนินการด่วน",
+    "cores": "คอร์",
+    "threads": "เธรด",
+    "free": "ว่าง",
+    "used": "ใช้แล้ว",
+    "total": "ทั้งหมด"
+  },
+  "safe_optimize": {
+    "title": "Optimize อัตโนมัติ",
+    "subtitle": "Optimize ด้วยปุ่มเดียว — ไม่มีความเสี่ยงต่อระบบ",
+    "button": "เริ่ม Optimize",
+    "button_running": "กำลัง Optimize...",
+    "creating_restore": "กำลังสร้าง Restore Point...",
+    "checklist_title": "รายการตรวจสอบก่อนเริ่ม",
+    "check_1": "ระบบจะสร้าง Restore Point อัตโนมัติ",
+    "check_2": "รันเฉพาะ optimization ที่ปลอดภัยและย้อนกลับได้",
+    "check_3": "สามารถยกเลิกการเปลี่ยนแปลงทั้งหมดได้จากประวัติ",
+    "complete": "Optimize เสร็จสิ้น!",
+    "complete_sub": "การปรับแต่งที่ปลอดภัยทั้งหมดถูกนำไปใช้เรียบร้อย",
+    "items_applied": "รายการถูกปรับใช้"
+  },
+  "advanced": {
+    "title": "ปรับแต่งขั้นสูง",
+    "subtitle": "ปรับแต่งระบบอย่างละเอียดด้วย Toggle แต่ละรายการ",
+    "revert_all": "คืนค่าทั้งหมด",
+    "tab_all": "ทั้งหมด",
+    "tab_privacy": "ความเป็นส่วนตัว",
+    "tab_performance": "ประสิทธิภาพ",
+    "tab_gaming": "เกม",
+    "tab_visual": "หน้าตา",
+    "tab_network": "เครือข่าย",
+    "tab_cleanup": "ทำความสะอาด",
+    "tab_boot": "เริ่มระบบ",
+    "tab_system": "ระบบ",
+    "pros": "ข้อดี",
+    "cons": "ข้อเสีย",
+    "reboot_required": "ต้องรีสตาร์ท",
+    "revert": "คืนค่า"
+  },
+  "process": {
+    "title": "จัดการ Process",
+    "subtitle": "จัดการ CPU Affinity และ Pin process ไปที่ P-Core หรือ E-Core",
+    "cpu_topology": "โครงสร้าง CPU",
+    "running_processes": "Process ที่กำลังทำงาน",
+    "pin_p_core": "Pin P-Core",
+    "pin_e_core": "Pin E-Core",
+    "reset": "รีเซ็ต",
+    "name": "ชื่อ Process",
+    "pid": "PID",
+    "cpu": "CPU %",
+    "memory": "หน่วยความจำ",
+    "affinity": "Affinity",
+    "refresh": "รีเฟรช",
+    "not_hybrid": "CPU ของคุณไม่มีสถาปัตยกรรม P-Core/E-Core แบบ Hybrid",
+    "p_cores": "P-Cores",
+    "e_cores": "E-Cores"
+  },
+  "bloatware": {
+    "title": "ลบ Bloatware",
+    "subtitle": "ลบแอปที่ติดตั้งมาล่วงหน้าที่ไม่ต้องการ",
+    "scanning": "กำลังสแกนแอปที่ติดตั้ง...",
+    "select_all": "เลือกทั้งหมด",
+    "deselect_all": "ยกเลิกทั้งหมด",
+    "remove_selected": "ลบที่เลือก",
+    "removing": "กำลังลบ...",
+    "no_bloatware": "ไม่พบ Bloatware!",
+    "microsoft": "แอป Microsoft",
+    "oem": "แอป OEM",
+    "manufacturer": "ผู้ผลิต"
+  },
+  "network": {
+    "title": "ปรับแต่งเครือข่าย",
+    "subtitle": "ปรับแต่ง DNS, TCP/IP stack และ latency ของเครือข่าย",
+    "dns_preset": "DNS ที่เลือก",
+    "current_dns": "DNS ปัจจุบัน",
+    "apply_dns": "ใช้งาน"
+  },
+  "history": {
+    "title": "ประวัติการดำเนินการ",
+    "subtitle": "บันทึกทั้งหมดของการปรับแต่งที่ทำไป",
+    "no_history": "ยังไม่มีการดำเนินการ",
+    "clear": "ล้างประวัติ",
+    "undo": "ยกเลิก",
+    "applied": "นำไปใช้แล้ว",
+    "reverted": "คืนค่าแล้ว",
+    "failed": "ล้มเหลว",
+    "export": "ส่งออก"
+  },
+  "settings": {
+    "title": "การตั้งค่า",
+    "subtitle": "ตั้งค่าแอปพลิเคชัน",
+    "language": "ภาษา",
+    "about": "เกี่ยวกับ Estz",
+    "about_desc": "เครื่องมือปรับแต่ง Windows สร้างด้วย Tauri + React"
+  },
+  "risk": {
+    "none": "ไม่มีความเสี่ยง",
+    "low": "ความเสี่ยงต่ำ",
+    "medium": "ความเสี่ยงปานกลาง",
+    "high": "ความเสี่ยงสูง"
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "ข้อผิดพลาด",
+    "success": "สำเร็จ",
+    "apply": "ใช้งาน",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "close": "ปิด",
+    "back": "กลับ"
+  }
+}

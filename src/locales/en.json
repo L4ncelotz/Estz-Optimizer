@@ -1,0 +1,142 @@
+{
+  "app": {
+    "name": "Estz",
+    "version": "v0.1.0",
+    "tagline": "Windows Performance Optimizer"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "safe_optimize": "Safe Optimize",
+    "advanced": "Advanced Tweaks",
+    "gaming": "Game Optimizer",
+    "process": "Process Manager",
+    "network": "Network",
+    "bloatware": "Bloatware Remover",
+    "history": "Action History",
+    "settings": "Settings",
+    "category_main": "Main",
+    "category_tools": "Tools",
+    "category_system": "System"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "System overview and real-time metrics",
+    "cpu_usage": "CPU Usage",
+    "ram_usage": "RAM Usage",
+    "gpu": "GPU",
+    "disk": "Disk",
+    "power_plan": "Power Plan",
+    "os": "Operating System",
+    "system_status": "System Status",
+    "quick_actions": "Quick Actions",
+    "cores": "Cores",
+    "threads": "Threads",
+    "free": "Free",
+    "used": "Used",
+    "total": "Total"
+  },
+  "safe_optimize": {
+    "title": "Safe Optimize",
+    "subtitle": "One-click safe optimization — zero risk to your system",
+    "button": "Start Optimization",
+    "button_running": "Optimizing...",
+    "creating_restore": "Creating Restore Point...",
+    "checklist_title": "Pre-flight Checklist",
+    "check_1": "System Restore Point will be created automatically",
+    "check_2": "Only safe, reversible optimizations will run",
+    "check_3": "All changes can be undone from Action History",
+    "complete": "Optimization Complete!",
+    "complete_sub": "All safe optimizations have been applied successfully",
+    "items_applied": "items applied"
+  },
+  "advanced": {
+    "title": "Advanced Tweaks",
+    "subtitle": "Fine-tune your system with individual toggles",
+    "revert_all": "Revert All",
+    "tab_all": "All",
+    "tab_privacy": "Privacy",
+    "tab_performance": "Performance",
+    "tab_gaming": "Gaming",
+    "tab_visual": "Visual",
+    "tab_network": "Network",
+    "tab_cleanup": "Cleanup",
+    "tab_boot": "Boot",
+    "tab_system": "System",
+    "pros": "Pros",
+    "cons": "Cons",
+    "reboot_required": "Reboot required",
+    "revert": "Revert"
+  },
+  "process": {
+    "title": "Process Manager",
+    "subtitle": "Manage CPU affinity and pin processes to P-Cores or E-Cores",
+    "cpu_topology": "CPU Topology",
+    "running_processes": "Running Processes",
+    "pin_p_core": "Pin P-Core",
+    "pin_e_core": "Pin E-Core",
+    "reset": "Reset",
+    "name": "Process",
+    "pid": "PID",
+    "cpu": "CPU %",
+    "memory": "Memory",
+    "affinity": "Affinity",
+    "refresh": "Refresh",
+    "not_hybrid": "Your CPU does not have a hybrid P-Core/E-Core architecture",
+    "p_cores": "P-Cores",
+    "e_cores": "E-Cores"
+  },
+  "bloatware": {
+    "title": "Bloatware Remover",
+    "subtitle": "Remove pre-installed apps you don't need",
+    "scanning": "Scanning installed apps...",
+    "select_all": "Select All",
+    "deselect_all": "Deselect All",
+    "remove_selected": "Remove Selected",
+    "removing": "Removing...",
+    "no_bloatware": "No bloatware detected!",
+    "microsoft": "Microsoft Apps",
+    "oem": "OEM Apps",
+    "manufacturer": "Manufacturer"
+  },
+  "network": {
+    "title": "Network Optimizer",
+    "subtitle": "Optimize DNS, TCP/IP stack, and network latency",
+    "dns_preset": "DNS Preset",
+    "current_dns": "Current DNS",
+    "apply_dns": "Apply"
+  },
+  "history": {
+    "title": "Action History",
+    "subtitle": "Complete log of all optimizations performed",
+    "no_history": "No actions recorded yet",
+    "clear": "Clear History",
+    "undo": "Undo",
+    "applied": "Applied",
+    "reverted": "Reverted",
+    "failed": "Failed",
+    "export": "Export"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "App preferences",
+    "language": "Language",
+    "about": "About Estz",
+    "about_desc": "Windows Performance Optimization Tool built with Tauri + React"
+  },
+  "risk": {
+    "none": "No Risk",
+    "low": "Low Risk",
+    "medium": "Medium Risk",
+    "high": "High Risk"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back"
+  }
+}
