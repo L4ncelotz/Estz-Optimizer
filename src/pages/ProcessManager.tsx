@@ -1,52 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { api, ProcessInfo, CpuTopology } from '../lib/tauri';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { api } from '../lib/tauri';
 import { Cpu, RefreshCw } from 'lucide-react';
 
 export default function ProcessManager() {
   const { t } = useTranslation();
-  const [processes, setProcesses] = useState<ProcessInfo[]>([]);
-  const [topology, setTopology] = useState<CpuTopology | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [actionPid, setActionPid] = useState<number | null>(null);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  const { data: topology } = useQuery({
+    queryKey: ['cpuTopology'],
+    queryFn: api.getCpuTopology,
+    staleTime: Infinity, // Topology doesn't change
+  });
 
-  async function loadData() {
-    setLoading(true);
-    try {
-      const [procs, topo] = await Promise.all([
-        api.listProcesses(),
-        api.getCpuTopology(),
-      ]);
-      setProcesses(procs);
-      setTopology(topo);
-    } catch (err) {
-      console.error('Failed to load processes:', err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const { data: processes, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ['processes'],
+    queryFn: api.listProcesses,
+    refetchInterval: 5000, 
+  });
 
-  async function handlePin(pid: number, type: 'p' | 'e' | 'reset') {
-    setActionPid(pid);
-    try {
-      if (type === 'p') await api.pinToPCores(pid);
-      else if (type === 'e') await api.pinToECores(pid);
-      else await api.resetAffinity(pid);
-    } catch (err) {
-      console.error(`Failed to set affinity for PID ${pid}:`, err);
-    } finally {
-      setActionPid(null);
-    }
-  }
+  const pinMutation = useMutation({
+    mutationFn: async ({ pid, type }: { pid: number; type: 'p' | 'e' | 'reset' }) => {
+      if (type === 'p') return api.pinToPCores(pid);
+      if (type === 'e') return api.pinToECores(pid);
+      return api.resetAffinity(pid);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['processes'] });
+    },
+  });
 
-  const filtered = processes.filter(p =>
+  const filtered = processes?.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  ) || [];
 
   return (
     <div className="animate-fade-in">
@@ -55,8 +43,8 @@ export default function ProcessManager() {
           <h2>{t('process.title')}</h2>
           <p>{t('process.subtitle')}</p>
         </div>
-        <button className="btn btn-ghost" onClick={loadData} disabled={loading}>
-          <RefreshCw size={16} className={loading ? 'spinner' : ''} />
+        <button className="btn btn-ghost" onClick={() => refetch()} disabled={isFetching}>
+          <RefreshCw size={16} className={isFetching ? 'spinner' : ''} />
           {t('process.refresh')}
         </button>
       </div>
@@ -135,7 +123,13 @@ export default function ProcessManager() {
               </tr>
             </thead>
             <tbody>
-              {filtered.slice(0, 50).map(proc => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={topology?.is_hybrid ? 5 : 4} style={{ textAlign: 'center', padding: 32 }}>
+                    <div className="spinner" style={{ margin: '0 auto' }}></div>
+                  </td>
+                </tr>
+              ) : filtered.slice(0, 50).map(proc => (
                 <tr key={proc.pid}>
                   <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{proc.name}</td>
                   <td>{proc.pid}</td>
@@ -148,13 +142,13 @@ export default function ProcessManager() {
                   {topology?.is_hybrid && (
                     <td>
                       <div style={{ display: 'flex', gap: 4 }}>
-                        <button className="btn btn-sm btn-primary" onClick={() => handlePin(proc.pid, 'p')} disabled={actionPid === proc.pid} style={{ padding: '3px 8px', fontSize: 11 }}>
+                        <button className="btn btn-sm btn-primary" onClick={() => pinMutation.mutate({ pid: proc.pid, type: 'p' })} disabled={pinMutation.isPending} style={{ padding: '3px 8px', fontSize: 11 }}>
                           P
                         </button>
-                        <button className="btn btn-sm btn-success" onClick={() => handlePin(proc.pid, 'e')} disabled={actionPid === proc.pid} style={{ padding: '3px 8px', fontSize: 11, background: 'var(--success)' }}>
+                        <button className="btn btn-sm btn-success" onClick={() => pinMutation.mutate({ pid: proc.pid, type: 'e' })} disabled={pinMutation.isPending} style={{ padding: '3px 8px', fontSize: 11, background: 'var(--success)' }}>
                           E
                         </button>
-                        <button className="btn btn-sm btn-ghost" onClick={() => handlePin(proc.pid, 'reset')} disabled={actionPid === proc.pid} style={{ padding: '3px 8px', fontSize: 11 }}>
+                        <button className="btn btn-sm btn-ghost" onClick={() => pinMutation.mutate({ pid: proc.pid, type: 'reset' })} disabled={pinMutation.isPending} style={{ padding: '3px 8px', fontSize: 11 }}>
                           ↺
                         </button>
                       </div>

@@ -22,10 +22,12 @@ pub struct ValidationResult {
 
 /// Detect hybrid CPU architecture (Intel 12th gen+)
 pub fn detect_hardware() -> HardwareInfo {
-    use sysinfo::System;
-
-    let mut sys = System::new_all();
-    sys.refresh_all();
+    static HW: std::sync::OnceLock<HardwareInfo> = std::sync::OnceLock::new();
+    HW.get_or_init(|| {
+        use sysinfo::System;
+    
+        let mut sys = System::new_all();
+        sys.refresh_all();
 
     let cpu_name = sys
         .cpus()
@@ -46,17 +48,18 @@ pub fn detect_hardware() -> HardwareInfo {
     let gpu_name = crate::system_info::get_system_overview().gpu_name.clone();
     let has_gpu = gpu_name != "Unknown GPU" && !gpu_name.contains("Microsoft Basic");
 
-    HardwareInfo {
-        is_hybrid_cpu: is_hybrid,
-        cpu_name,
-        p_cores,
-        e_cores,
-        total_cores,
-        total_threads,
-        is_ssd,
-        has_gpu,
-        gpu_name,
-    }
+        HardwareInfo {
+            is_hybrid_cpu: is_hybrid,
+            cpu_name,
+            p_cores,
+            e_cores,
+            total_cores,
+            total_threads,
+            is_ssd,
+            has_gpu,
+            gpu_name,
+        }
+    }).clone()
 }
 
 /// Detect P-Core / E-Core topology

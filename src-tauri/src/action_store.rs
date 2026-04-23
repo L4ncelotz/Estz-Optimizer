@@ -102,6 +102,7 @@ impl ActionStore {
         sorted
     }
 
+#[allow(dead_code)]
     pub fn get_unrevertable_actions(&self) -> Vec<ActionRecord> {
         self.actions
             .iter()

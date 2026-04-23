@@ -54,6 +54,7 @@ pub fn execute(script: &str) -> PsOutput {
 }
 
 /// Execute a PowerShell script file
+#[allow(dead_code)]
 pub fn execute_script_file(path: &str) -> PsOutput {
     let script = format!(
         r#"& '{}'"#,
@@ -72,11 +73,17 @@ pub fn get_active_power_plan() -> String {
     }
 }
 
+/// Sanitize string for PowerShell single-quote injection
+fn escape_ps_string(input: &str) -> String {
+    input.replace("'", "''")
+}
+
 /// Check if a Windows service is running
 pub fn is_service_running(service_name: &str) -> bool {
+    let safe_name = escape_ps_string(service_name);
     let script = format!(
         "(Get-Service -Name '{}' -ErrorAction SilentlyContinue).Status -eq 'Running'",
-        service_name
+        safe_name
     );
     let result = execute(&script);
     result.stdout.to_lowercase().contains("true")
@@ -84,9 +91,10 @@ pub fn is_service_running(service_name: &str) -> bool {
 
 /// Get a list of installed Appx packages matching a pattern
 pub fn get_appx_packages(pattern: &str) -> Vec<String> {
+    let safe_pattern = escape_ps_string(pattern);
     let script = format!(
         "Get-AppxPackage -Name '*{}*' | Select-Object -ExpandProperty Name",
-        pattern
+        safe_pattern
     );
     let result = execute(&script);
     if result.success {
@@ -103,9 +111,10 @@ pub fn get_appx_packages(pattern: &str) -> Vec<String> {
 
 /// Remove an Appx package
 pub fn remove_appx_package(package_name: &str) -> PsOutput {
+    let safe_name = escape_ps_string(package_name);
     let script = format!(
         "Get-AppxPackage -Name '{}' -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue",
-        package_name
+        safe_name
     );
     execute(&script)
 }

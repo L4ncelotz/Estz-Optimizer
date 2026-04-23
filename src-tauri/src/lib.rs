@@ -12,9 +12,9 @@ use action_store::ActionStore;
 use std::sync::Mutex;
 use tauri::State;
 
-// Managed state for action store
 struct AppState {
     action_store: Mutex<ActionStore>,
+    sys: Mutex<sysinfo::System>,
 }
 
 // === SYSTEM INFO COMMANDS ===
@@ -25,8 +25,9 @@ fn get_system_overview() -> system_info::SystemOverview {
 }
 
 #[tauri::command]
-async fn get_live_metrics() -> system_info::LiveMetrics {
-    system_info::get_live_metrics()
+async fn get_live_metrics(state: State<'_, AppState>) -> Result<system_info::LiveMetrics, String> {
+    let mut sys = state.sys.lock().map_err(|e| e.to_string())?;
+    Ok(system_info::get_live_metrics(&mut sys))
 }
 
 // === HARDWARE COMMANDS ===
@@ -157,8 +158,12 @@ fn execute_powershell(script: String) -> powershell::PsOutput {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let mut sys = sysinfo::System::new_all();
+    sys.refresh_all();
+    
     let app_state = AppState {
         action_store: Mutex::new(ActionStore::load()),
+        sys: Mutex::new(sys),
     };
 
     tauri::Builder::default()

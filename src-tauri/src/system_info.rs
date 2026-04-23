@@ -1,5 +1,5 @@
 use serde::Serialize;
-use std::process::Command;
+
 
 #[derive(Debug, Serialize, Clone)]
 pub struct SystemOverview {
@@ -27,10 +27,12 @@ pub struct LiveMetrics {
 }
 
 pub fn get_system_overview() -> SystemOverview {
-    use sysinfo::{System, Disks};
-
-    let mut sys = System::new_all();
-    sys.refresh_all();
+    static OVERVIEW: std::sync::OnceLock<SystemOverview> = std::sync::OnceLock::new();
+    OVERVIEW.get_or_init(|| {
+        use sysinfo::{System, Disks};
+    
+        let mut sys = System::new_all();
+        sys.refresh_all();
 
     let os_name = System::name().unwrap_or_else(|| "Windows".to_string());
     let os_version = System::os_version().unwrap_or_else(|| "Unknown".to_string());
@@ -81,30 +83,26 @@ pub fn get_system_overview() -> SystemOverview {
         None => (0.0, 0.0, 0.0),
     };
 
-    SystemOverview {
-        os_name,
-        os_version,
-        hostname,
-        cpu_name,
-        cpu_cores_physical,
-        cpu_cores_logical,
-        ram_total_gb: (ram_total_gb * 10.0).round() / 10.0,
-        ram_used_gb: (ram_used_gb * 10.0).round() / 10.0,
-        ram_usage_percent: (ram_usage_percent * 10.0).round() / 10.0,
-        gpu_name,
-        disk_total_gb: (disk_total_gb * 10.0).round() / 10.0,
-        disk_free_gb: (disk_free_gb * 10.0).round() / 10.0,
-        disk_usage_percent: (disk_usage_percent * 10.0).round() / 10.0,
-    }
+        SystemOverview {
+            os_name,
+            os_version,
+            hostname,
+            cpu_name,
+            cpu_cores_physical,
+            cpu_cores_logical,
+            ram_total_gb: (ram_total_gb * 10.0).round() / 10.0,
+            ram_used_gb: (ram_used_gb * 10.0).round() / 10.0,
+            ram_usage_percent: (ram_usage_percent * 10.0).round() / 10.0,
+            gpu_name,
+            disk_total_gb: (disk_total_gb * 10.0).round() / 10.0,
+            disk_free_gb: (disk_free_gb * 10.0).round() / 10.0,
+            disk_usage_percent: (disk_usage_percent * 10.0).round() / 10.0,
+        }
+    }).clone()
 }
 
-pub fn get_live_metrics() -> LiveMetrics {
-    use sysinfo::System;
-
-    let mut sys = System::new();
-    sys.refresh_cpu_all();
-    std::thread::sleep(std::time::Duration::from_millis(200));
-    sys.refresh_cpu_all();
+pub fn get_live_metrics(sys: &mut sysinfo::System) -> LiveMetrics {
+    sys.refresh_cpu_usage();
     sys.refresh_memory();
 
     let cpu_usage = sys.global_cpu_usage() as f64;
@@ -127,7 +125,10 @@ pub fn get_live_metrics() -> LiveMetrics {
 }
 
 fn get_gpu_name() -> String {
-    let output = Command::new("powershell")
+    static GPU_NAME: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    GPU_NAME.get_or_init(|| {
+        let output = std::process::Command::new("powershell")
+
         .args([
             "-NoProfile",
             "-NonInteractive",
@@ -147,4 +148,5 @@ fn get_gpu_name() -> String {
         }
         _ => "Unknown GPU".to_string(),
     }
+    }).clone()
 }
